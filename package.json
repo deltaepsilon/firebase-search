@@ -1,0 +1,37 @@
+{
+  "name": "firebase-search",
+  "version": "1.0.0",
+  "description": "Index your Firebase collections to Elasticsearch and/or Algolia using Firebase Functions",
+  "main": "firebase-search.js",
+  "scripts": {
+    "tunnel": "node tunnel.js",
+    "test": "node tunnel.js && node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deltaepsilon/firebase-search.git"
+  },
+  "keywords": [
+    "firebase",
+    "elasticsearch",
+    "algolia",
+    "search"
+  ],
+  "author": "Chris Esplin <chris@quiver.is>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deltaepsilon/firebase-search/issues"
+  },
+  "homepage": "https://github.com/deltaepsilon/firebase-search",
+  "devDependencies": {
+    "axios": "^0.13.1",
+    "firebase-local-functions": "git+https://github.com/deltaepsilon/firebase-local-functions.git",
+    "tape": "^4.6.0"
+  },
+  "dependencies": {
+    "elasticsearch": "^11.0.1",
+    "firebase": "^3.2.1",
+    "firebase-functions": "https://storage.googleapis.com/firebase-preview-drop/node/firebase-functions/firebase-functions-preview.latest.tar.gz",
+    "lodash": "^4.14.1"
+  }
+}
