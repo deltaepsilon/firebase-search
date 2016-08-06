@@ -26,7 +26,8 @@
   "devDependencies": {
     "axios": "^0.13.1",
     "firebase-local-functions": "git+https://github.com/deltaepsilon/firebase-local-functions.git",
-    "tape": "^4.6.0"
+    "tape": "^4.6.0",
+    "tape-catch": "^1.0.6"
   },
   "dependencies": {
     "elasticsearch": "^11.0.1",
