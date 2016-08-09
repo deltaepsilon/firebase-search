@@ -128,6 +128,9 @@ ref.once('value')
           q: 'name:Luke'
         })
           .then(function (res) {
+            if (!res.hits.hits[0]) {
+              return console.log('no hits found... rebuild data.');
+            }
             var firstHit = res.hits.hits[0]._source;
             t.equal(firstHit.name, 'Luke Skywalker');
             t.end();

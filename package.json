@@ -5,7 +5,11 @@
   "main": "firebase-search.js",
   "scripts": {
     "tunnel": "node tunnel.js",
-    "test": "node tunnel.js && node test.js"
+    "test": "node tunnel.js && node test.js",
+    "deploy-functions": "firebase deploy --only functions",
+    "deploy-database": "firebase deploy --only database",
+    "deploy-hosting": "firebase deploy --only hosting",
+    "deploy": "firebase deploy"
   },
   "repository": {
     "type": "git",
@@ -25,7 +29,6 @@
   "homepage": "https://github.com/deltaepsilon/firebase-search",
   "devDependencies": {
     "axios": "^0.13.1",
-    "firebase-local-functions": "git+https://github.com/deltaepsilon/firebase-local-functions.git",
     "tape": "^4.6.0",
     "tape-catch": "^1.0.6"
   },

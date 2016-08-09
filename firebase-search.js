@@ -123,11 +123,18 @@ FirebaseSearch.prototype.elasticsearch = {
   },
   firebase: { // Firebase index management
     build: function (returnPromise) {
-      var ref = firebaseSearch.ref;
-      return ref.orderByKey().limitToLast(1).once('child_added')
-        .then(function (snap) {
-          return snap.key;
-        })
+      return new Promise(function(resolve, reject) {
+        var ref = firebaseSearch.ref.orderByKey().limitToLast(1); 
+        var handler = function(snap) {
+          ref.off('child_added', handler);
+          resolve(snap.key);
+        };
+        var timer = setTimeout(function() { // Must be empty if no response in 1000 millis
+          ref.off('child_added', handler);
+          reject('Timeout! Could be an empty Firebase collection.');
+        }, 1000);
+        ref.on('child_added', handler);
+      }) 
         .then(function (lastKey) {
           return new Promise(function (resolve, reject) {
             var ref = firebaseSearch.ref.orderByKey();

@@ -1,0 +1,14 @@
+path /firebase-search/{environment}/users {
+  read() { true }
+}
+
+path /firebase-search/{environment}/user-search is Search {
+  read() { true }
+  write() { true }
+}
+
+type Search {
+  validate() { this.q.length < 100 && this.timestamp.length < 100 }
+  q: String,
+  timestamp: String
+}
