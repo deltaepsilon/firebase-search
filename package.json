@@ -5,7 +5,7 @@
   "main": "firebase-search.js",
   "scripts": {
     "tunnel": "node tunnel.js",
-    "test": "node tunnel.js && node test.js",
+    "test": "node test-elasticsearch.js && node test-algolia.js",
     "deploy-functions": "firebase deploy --only functions",
     "deploy-database": "firebase deploy --only database",
     "deploy-hosting": "firebase deploy --only hosting",
@@ -33,9 +33,9 @@
     "tape-catch": "^1.0.6"
   },
   "dependencies": {
+    "algoliasearch": "^3.18.0",
     "elasticsearch": "^11.0.1",
     "firebase": "^3.2.1",
-    "firebase-functions": "https://storage.googleapis.com/firebase-preview-drop/node/firebase-functions/firebase-functions-preview.latest.tar.gz",
     "lodash": "^4.14.1"
   }
 }
