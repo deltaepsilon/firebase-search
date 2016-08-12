@@ -42,11 +42,18 @@ function FirebaseSearch(ref, options, type) {
       ref.on('child_added', handler);
     });
   };
+  this.fire = function (name, detail) {
+    firebaseSearch.emit(name, detail);
+    firebaseSearch.emit('all', {
+      name: name,
+      detail: detail
+    });
+  };
 };
 
 inherits(FirebaseSearch, EventEmitter);
 
-var toPromise = function (fn, args, algoliaWait) {
+function toPromise(fn, args, algoliaWait) {
   return new Promise(function (resolve, reject) {
     var argsArray = Array.isArray(args) ? args : [args];
 
@@ -72,6 +79,12 @@ var toPromise = function (fn, args, algoliaWait) {
     }
     fn.apply(this, argsArray);
   }.bind(this));
+};
+
+function addKeyToSnap(snap) {
+  var obj = snap.val();
+  obj.__id__ = snap.key;
+  return obj;
 };
 
 FirebaseSearch.prototype.elasticsearch = {
@@ -216,7 +229,7 @@ FirebaseSearch.prototype.elasticsearch = {
               started = true;
               resolve(snap.key);
             } else {
-              firebaseSearch.emit('elasticsearch_child_added', snap);
+              firebaseSearch.fire('elasticsearch_child_added', addKeyToSnap(snap));
               // firebaseSearch.log('elasticsearch_child_added', snap.key);
               firebaseSearch.elasticsearch.create({
                 id: snap.key,
@@ -225,15 +238,17 @@ FirebaseSearch.prototype.elasticsearch = {
             }
           },
           child_changed: function (snap) {
-            firebaseSearch.emit('elasticsearch_child_changed', snap);
+            firebaseSearch.fire('elasticsearch_child_changed', addKeyToSnap(snap));
             // firebaseSearch.log('elasticsearch_child_changed', snap.key);
             firebaseSearch.elasticsearch.update({
               id: snap.key,
-              body: snap.val()
+              body: {
+                doc: snap.val()
+              } 
             });
           },
           child_removed: function (snap) {
-            firebaseSearch.emit('elasticsearch_child_removed', snap);
+            firebaseSearch.fire('elasticsearch_child_removed', addKeyToSnap(snap));
             // firebaseSearch.log('elasticsearch_child_removed', snap.key);
             firebaseSearch.elasticsearch.delete({
               id: snap.key
@@ -286,6 +301,13 @@ FirebaseSearch.prototype.algolia = {
   },
   waitTask: function (args) {
     return toPromise(firebaseSearch.algolia.index.waitTask.bind(firebaseSearch.algolia.index), args);
+  },
+  exists: function (name) {
+    var name = name || firebaseSearch.type;
+    return firebaseSearch.algolia.listIndexes()
+      .then(function (indexes) {
+        return !!~_.map(indexes.items, 'name').indexOf(name);
+      });
   },
   firebase: {
     build: function () {
@@ -366,7 +388,7 @@ FirebaseSearch.prototype.algolia = {
               firebaseSearch.algolia.addObject(obj, true)
                 .then(function () {
                   // firebaseSearch.log('algolia_child_added', snap.key);
-                  firebaseSearch.emit('algolia_child_added', obj);
+                  firebaseSearch.fire('algolia_child_added', obj);
                 });
             }
           },
@@ -376,14 +398,14 @@ FirebaseSearch.prototype.algolia = {
             firebaseSearch.algolia.saveObject(obj, true)
               .then(function () {
                 // firebaseSearch.log('algolia_child_changed', snap.key);
-                firebaseSearch.emit('algolia_child_changed', obj);
+                firebaseSearch.fire('algolia_child_changed', obj);
               });
           },
           child_removed: function (snap) {
             firebaseSearch.algolia.deleteObject(snap.key, true)
               .then(function () {
                 // firebaseSearch.log('algolia_child_removed', snap.key);
-                firebaseSearch.emit('algolia_child_removed', snap.key);
+                firebaseSearch.fire('algolia_child_removed', snap.key);
               });
           }
         };
