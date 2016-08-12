@@ -40,3 +40,4 @@ jspm_packages
 bower_components
 env.json
 .vscode
+service-account.json
