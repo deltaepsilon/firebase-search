@@ -41,3 +41,4 @@ bower_components
 env.json
 .vscode
 service-account.json
+fake-users.json
