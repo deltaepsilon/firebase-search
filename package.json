@@ -1,5 +1,5 @@
 {
-  "name": "firebase-search",
+  "name": "quiver-firebase-search",
   "version": "1.0.0",
   "description": "Index your Firebase collections to Elasticsearch and/or Algolia",
   "main": "firebase-search.js",

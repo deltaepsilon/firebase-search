@@ -39,7 +39,7 @@ search.elasticsearch.indices.exists()
     return search.algolia.exists();
   })
   .then(function(exists) { // Make sure that Algolia index exists
-    return exists ? search.algolia.setSettings({attributesToIndex: ['name', 'gender']}) : search.algolia.clearIndex(true);
+    return exists ? search.algolia.clearIndex(true) : search.algolia.setSettings({attributesToIndex: ['name', 'gender']});
   })
   .then(function() { // Set listeners
     search.elasticsearch.firebase.start();
@@ -52,7 +52,7 @@ search.elasticsearch.indices.exists()
   .then(function() {
     return usersRef.remove();
   })
-  .then(function () { // Download 50 users from SWAPI
+  .then(function () { // Download 5 users from SWAPI
     var i = 5;
     var promises = [];
     var users = [];
