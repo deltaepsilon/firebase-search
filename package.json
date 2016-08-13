@@ -1,12 +1,11 @@
 {
   "name": "firebase-search",
   "version": "1.0.0",
-  "description": "Index your Firebase collections to Elasticsearch and/or Algolia using Firebase Functions",
+  "description": "Index your Firebase collections to Elasticsearch and/or Algolia",
   "main": "firebase-search.js",
   "scripts": {
     "tunnel": "node tunnel.js",
     "test": "node test-elasticsearch.js && node test-algolia.js",
-    "deploy-functions": "firebase deploy --only functions",
     "deploy-database": "firebase deploy --only database",
     "deploy-hosting": "firebase deploy --only hosting",
     "deploy": "firebase deploy"
