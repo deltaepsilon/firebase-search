@@ -30,7 +30,7 @@ Install with nmp: ```npm install quiver-firebase-search```.
   - Install [gcloud](https://cloud.google.com/sdk/)
   - Run ```gcloud --version``` and update if prompted
   - Run ```gcloud init``` to get your project initialized
-  - Run ```npm tunnel``` to read out a shell command that you can use to launch a local tunnel on port 9200 to your Elasticsearch cluster. This tunnel is required for testing and development, but not for production.
+  - Run ```npm run-script tunnel``` to read out a shell command that you can use to launch a local tunnel on port 9200 to your Elasticsearch cluster. This tunnel is required for testing and development, but not for production.
   - Visit [http://localhost:9200](http://localhost:9200) in your browser. You should see some JSON read out from Elasticsearch if your cluster is running and your tunnel is also live.
 
 ### Configure Algolia
