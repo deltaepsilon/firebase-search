@@ -13,7 +13,9 @@ function FirebaseSearch(ref, options, type) {
   this.ref = ref;
   this.options = options;
   this.type = type || ref.toString().replace(/.+\.com\//, '').replace(/\//g, ':');
-  this.log = require('./services/log')(ref.parent.child(`firebase-search/logs/${this.type}`));
+  if (env.log) {
+    this.log = require('./services/log')(ref.parent.child(`firebase-search/logs/${this.type}`));
+  }
   if (this.options.elasticsearch) {
     var elasticsearch = require('elasticsearch');
     this.elasticsearch.client = new elasticsearch.Client(_.clone(this.options.elasticsearch));
