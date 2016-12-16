@@ -13,10 +13,7 @@ var log = bootstrap.log;
 var wait = bootstrap.wait;
 
 module.exports = function () {
-  return bootstrap.initialize()
-    .then(function () {
-      return usersRef.child('newUser').remove();
-    })
+  return usersRef.remove()
     .then(function () {
       return search.algolia.listIndexes();
     })
@@ -31,6 +28,19 @@ module.exports = function () {
           'timestamp'
         ]
       });
+    })
+    .then(function () {
+      return search.algolia.firebase.start();
+    })
+    .then(function (firstKey) {
+      if (firstKey !== true) throw new Error('firstKey should be true');
+      return true;
+    })
+    .then(function () {
+      return search.algolia.clearIndex();
+    })
+    .then(function () {
+      return bootstrap.initialize();
     })
     .then(function () {
       return new Promise(function (resolve, reject) {

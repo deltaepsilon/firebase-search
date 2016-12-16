@@ -13,7 +13,7 @@ function FirebaseSearch(ref, options, type) {
   this.ref = ref;
   this.options = options;
   this.type = type || ref.toString().replace(/.+\.com\//, '').replace(/\//g, ':');
-  if (env.log) {
+  if (options.log) {
     this.log = require('./services/log')(ref.parent.child(`firebase-search/logs/${this.type}`));
   }
   if (this.options.elasticsearch) {
@@ -30,6 +30,19 @@ function FirebaseSearch(ref, options, type) {
   } else {
     this.algolia = 'Algolia options undefined';
   }
+
+  this.ensureExistingUser = function () {
+    ref.orderByKey().limitToLast(1).once('value', function (snap) {
+      if (!snap.numChildren()) {
+        var fakeRef = ref.push();
+        fakeRef.set(true)
+          .then(function () {
+            fakeRef.remove();
+          })
+      }
+    });
+  };
+
   this.getLastKey = function () {
     return new Promise(function (resolve, reject) {
       var ref = firebaseSearch.ref.orderByKey().limitToLast(1);
@@ -227,7 +240,7 @@ FirebaseSearch.prototype.elasticsearch = {
         var started;
         firebaseSearch.elasticsearch.handlers = {
           child_added: function (snap) {
-            if (!started) { // Skip the first child_added event. It's always an existing record. 
+            if (!started) { // Skip the first child_added event. It's often an existing record. 
               started = true;
               resolve(snap.key);
             } else {
@@ -246,7 +259,7 @@ FirebaseSearch.prototype.elasticsearch = {
               id: snap.key,
               body: {
                 doc: snap.val()
-              } 
+              }
             });
           },
           child_removed: function (snap) {
@@ -262,9 +275,13 @@ FirebaseSearch.prototype.elasticsearch = {
           child_changed: ref,
           child_removed: ref
         };
-        firebaseSearch.elasticsearch.listeningRefs.child_added.on('child_added', firebaseSearch.elasticsearch.handlers.child_added);
-        firebaseSearch.elasticsearch.listeningRefs.child_changed.on('child_changed', firebaseSearch.elasticsearch.handlers.child_changed);
-        firebaseSearch.elasticsearch.listeningRefs.child_removed.on('child_removed', firebaseSearch.elasticsearch.handlers.child_removed);
+        firebaseSearch.elasticsearch.listeningRefs.child_added.once('value')
+          .then(function (snap) {
+            if (!snap.numChildren()) started = true, resolve(true);
+            firebaseSearch.elasticsearch.listeningRefs.child_added.on('child_added', firebaseSearch.elasticsearch.handlers.child_added);
+            firebaseSearch.elasticsearch.listeningRefs.child_changed.on('child_changed', firebaseSearch.elasticsearch.handlers.child_changed);
+            firebaseSearch.elasticsearch.listeningRefs.child_removed.on('child_removed', firebaseSearch.elasticsearch.handlers.child_removed);
+          });
       });
     },
     stop: function () {
@@ -381,7 +398,7 @@ FirebaseSearch.prototype.algolia = {
         var started;
         firebaseSearch.algolia.handlers = {
           child_added: function (snap) {
-            if (!started) { // Skip the first child_added event. It's always an existing record. 
+            if (!started) { // Skip the first child_added event. It's often an existing record. 
               started = true;
               resolve(snap.key);
             } else {
@@ -416,9 +433,14 @@ FirebaseSearch.prototype.algolia = {
           child_changed: ref,
           child_removed: ref
         };
-        firebaseSearch.algolia.listeningRefs.child_added.on('child_added', firebaseSearch.algolia.handlers.child_added);
-        firebaseSearch.algolia.listeningRefs.child_changed.on('child_changed', firebaseSearch.algolia.handlers.child_changed);
-        firebaseSearch.algolia.listeningRefs.child_removed.on('child_removed', firebaseSearch.algolia.handlers.child_removed);
+
+        firebaseSearch.algolia.listeningRefs.child_added.once('value')
+          .then(function (snap) {
+            if (!snap.numChildren()) started = true, resolve(true);
+            firebaseSearch.algolia.listeningRefs.child_added.on('child_added', firebaseSearch.algolia.handlers.child_added);
+            firebaseSearch.algolia.listeningRefs.child_changed.on('child_changed', firebaseSearch.algolia.handlers.child_changed);
+            firebaseSearch.algolia.listeningRefs.child_removed.on('child_removed', firebaseSearch.algolia.handlers.child_removed);
+          });
       });
     },
     stop: function () {
