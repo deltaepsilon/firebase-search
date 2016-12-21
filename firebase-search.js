@@ -111,7 +111,7 @@ function setPrototype(firebaseSearch) {
   };
 
 
-  FirebaseSearch.prototype.elasticsearch = {
+  firebaseSearch.elasticsearch = {
     indices: {
       exists: function (params) {
         var params = _.defaults(params, {
@@ -305,7 +305,7 @@ function setPrototype(firebaseSearch) {
     }
   };
 
-  FirebaseSearch.prototype.algolia = {
+  firebaseSearch.algolia = {
     search: function (query, options) {
       return toPromise(firebaseSearch.algolia.index.search.bind(firebaseSearch.algolia.index), [query, options]);
     },
