@@ -55,6 +55,8 @@ function FirebaseSearch(ref, options, type) {
   this.type = type || ref.toString().replace(/.+\.com\//, '').replace(/\//g, ':');
   if (options.log) {
     this.log = require('./services/log')(ref.parent.child(`firebase-search/logs/${this.type}`));
+  } else {
+    this.log = console.log;
   }
   if (this.options.elasticsearch) {
     var elasticsearch = require('elasticsearch');
