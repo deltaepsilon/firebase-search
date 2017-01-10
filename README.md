@@ -72,8 +72,8 @@ var search = new FirebaseSearch(usersRef, {
   algolia: algoliaConfig
 }, 'users');
 
-search.elasticsearch.start();
-search.algolia.start();
+search.elasticsearch.firebase.start();
+search.algolia.firebase.start();
 ```
 
 # FirebaseSearch Functions
