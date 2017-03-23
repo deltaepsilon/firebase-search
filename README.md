@@ -1,6 +1,6 @@
 # Installation
 
-Install with nmp: ```npm install quiver-firebase-search```.
+Install with npm: ```npm install quiver-firebase-search```.
 
 # Configuration
 
