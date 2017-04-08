@@ -470,8 +470,12 @@ function setPrototype(firebaseSearch) {
           };
 
           firebaseSearch.algolia.listeningRefs.child_added.once('value').then(function(snap) {
-            if (!snap.numChildren()) (started = true), resolve(true);
-            startingKeys = Object.keys(snap.val());
+            if (!snap.numChildren()) {
+              started = true;
+              resolve(true);
+            } else {
+              startingKeys = Object.keys(snap.val());
+            }
             firebaseSearch.algolia.listeningRefs.child_added.on(
               'child_added',
               firebaseSearch.algolia.handlers.child_added
