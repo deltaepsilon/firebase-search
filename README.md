@@ -46,7 +46,7 @@ Install with npm: ```npm install quiver-firebase-search```.
 # Example Usage
 
 ```javascript
-var FirebaseSearch = require('./firebase-search.js');
+var FirebaseSearch = require('firebase-search.js');
 var firebase = require('firebase');
 
 firebase.initializeApp({
