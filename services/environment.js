@@ -8,4 +8,4 @@ var result = {
   production: _.defaultsDeep(env.production, env.defaults)
 };
 
-return module.exports = _.defaultsDeep(result, result[environment]); 
+module.exports = _.defaultsDeep(result, result[environment]); 

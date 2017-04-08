@@ -1,11 +1,12 @@
 {
   "name": "quiver-firebase-search",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Index your Firebase collections to Elasticsearch and/or Algolia",
   "main": "firebase-search.js",
   "scripts": {
     "tunnel": "node tunnel.js",
     "test": "node test-elasticsearch.js && node test-algolia.js",
+    "jasmine": "jasmineal",
     "deploy-database": "firebase deploy --only database",
     "deploy-hosting": "firebase deploy --only hosting",
     "deploy": "firebase deploy"
@@ -28,15 +29,17 @@
   "homepage": "https://github.com/deltaepsilon/firebase-search",
   "devDependencies": {
     "axios": "^0.13.1",
+    "firebase-admin": "^4.2.0",
     "jasmine": "^2.5.3",
     "json-format": "^0.1.2",
     "tape": "^4.6.0",
     "tape-catch": "^1.0.6"
   },
   "dependencies": {
-    "algoliasearch": "^3.18.0",
+    "algoliasearch": "^3.22.1",
     "elasticsearch": "^11.0.1",
     "firebase": "^3.2.1",
-    "lodash": "^4.14.1"
+    "lodash": "^4.14.1",
+    "queue": "^4.2.1"
   }
 }
