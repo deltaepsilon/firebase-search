@@ -1,6 +1,6 @@
 # Installation
 
-Install with nmp: ```npm install quiver-firebase-search```.
+Install with npm: ```npm install quiver-firebase-search```.
 
 # Configuration
 
@@ -46,7 +46,7 @@ Install with nmp: ```npm install quiver-firebase-search```.
 # Example Usage
 
 ```javascript
-var FirebaseSearch = require('./firebase-search.js');
+var FirebaseSearch = require('firebase-search.js');
 var firebase = require('firebase');
 
 firebase.initializeApp({
@@ -72,8 +72,15 @@ var search = new FirebaseSearch(usersRef, {
   algolia: algoliaConfig
 }, 'users');
 
-search.elasticsearch.start();
-search.algolia.start();
+// Optional elasticsearch configuration settings
+var config = {
+  added: { /* settings passed into elasticsearch client create function */ },
+  changed: { /* settings passed into elasticsearch client update function  */ },
+  deleted: { /* settings passed into elasticsearch client delete function  */ }
+};
+
+search.elasticsearch.firebase.start(config);
+search.algolia.firebase.start();
 ```
 
 # FirebaseSearch Functions
@@ -225,8 +232,17 @@ search.elasticsearch.firebase.build()
 
 Starts listening to Firebase records additions, changes and removals, syncing Elasticsearch appropriately
 
+Optional `config` is used to pass custom parameters to ElasticSearch's [create](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-create), [update](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-update), and [delete](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-delete) function calls.
+
 ```javascript
-search.elasticsearch.firebase.start()
+// Optional elasticsearch configuration settings
+var config = {
+  added: { /* settings passed into elasticsearch client create function */ },
+  changed: { /* settings passed into elasticsearch client update function  */ },
+  deleted: { /* settings passed into elasticsearch client delete function  */ }
+};
+
+search.elasticsearch.firebase.start(config)
   .then(function () {
     console.log('Syncing Elasticsearch with Firebase');
   })

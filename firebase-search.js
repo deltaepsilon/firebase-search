@@ -269,7 +269,10 @@ function setPrototype(firebaseSearch) {
           });
         });
       },
-      start: function() {
+      start: function(config) {
+        // set default value for config to an empty object if not provided
+        config = typeof config !== 'undefined' ? config : {};
+
         return new Promise(function(resolve, reject) {
           var ref = firebaseSearch.ref;
           var started;
@@ -282,28 +285,34 @@ function setPrototype(firebaseSearch) {
               } else {
                 firebaseSearch.fire('elasticsearch_child_added', addKeyToSnap(snap));
                 // firebaseSearch.log('elasticsearch_child_added', snap.key);
-                firebaseSearch.elasticsearch.create({
-                  id: snap.key,
-                  body: snap.val()
-                });
+                firebaseSearch.elasticsearch.create(
+                  _.merge({}, config.added, {
+                    id: snap.key,
+                    body: snap.val()
+                  })
+                );
               }
             },
             child_changed: function(snap) {
               firebaseSearch.fire('elasticsearch_child_changed', addKeyToSnap(snap));
               // firebaseSearch.log('elasticsearch_child_changed', snap.key);
-              firebaseSearch.elasticsearch.update({
-                id: snap.key,
-                body: {
-                  doc: snap.val()
-                }
-              });
+              firebaseSearch.elasticsearch.update(
+                _.merge({}, config.changed, {
+                  id: snap.key,
+                  body: {
+                    doc: snap.val()
+                  }
+                })
+              );
             },
             child_removed: function(snap) {
               firebaseSearch.fire('elasticsearch_child_removed', addKeyToSnap(snap));
               // firebaseSearch.log('elasticsearch_child_removed', snap.key);
-              firebaseSearch.elasticsearch.delete({
-                id: snap.key
-              });
+              firebaseSearch.elasticsearch.delete(
+                _.merge({}, config.deleted, {
+                  id: snap.key
+                })
+              );
             }
           };
           firebaseSearch.elasticsearch.listeningRefs = {
