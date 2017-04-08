@@ -28,6 +28,7 @@
   "homepage": "https://github.com/deltaepsilon/firebase-search",
   "devDependencies": {
     "axios": "^0.13.1",
+    "jasmine": "^2.5.3",
     "json-format": "^0.1.2",
     "tape": "^4.6.0",
     "tape-catch": "^1.0.6"
